@@ -25,7 +25,7 @@ jobs:
           python -m playwright install --with-deps
 
       - name: Run tests
-        run: pytest -v --headed
+        run: pytest --headless
 
       - name: Upload Playwright report
         if: always()
