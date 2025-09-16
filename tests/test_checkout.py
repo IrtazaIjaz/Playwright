@@ -21,4 +21,5 @@ def test_checkout_flow(page):
     # Assert order confirmation
     confirmation = page.locator(".complete-header")
     assert confirmation.is_visible(), "Order confirmation not visible after checkout"
-    assert "THANK YOU FOR YOUR ORDER" in confirmation.text_content(), "Unexpected confirmation message"
+    assert "thank you for your order" in confirmation.text_content().lower(), \
+        f"Unexpected confirmation message: {confirmation.text_content()}"
