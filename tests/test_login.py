@@ -1,28 +1,12 @@
 import pytest
-from playwright.sync_api import sync_playwright
 
 # Helper: take screenshot on failure
 def take_screenshot_on_failure(page, name):
     page.screenshot(path=f"screenshots/{name}.png")
 
-# Fixture: set up and tear down browser/page
-@pytest.fixture(scope="function")
-def setup():
-    with sync_playwright() as p:
-        browser = p.chromium.launch(headless=False)  # set headless=True for CI
-        context = browser.new_context()
-        page = context.new_page()
-        page.goto("https://www.saucedemo.com/")
-        yield page
-        context.close()
-        browser.close()
 
-# -------------------------
-# Tests
-# -------------------------
-
-def test_login_valid_user(setup):
-    page = setup
+def test_login_valid_user(page):
+    page.goto("https://www.saucedemo.com/")
     page.fill("input[data-test='username']", "standard_user")
     page.fill("input[data-test='password']", "secret_sauce")
     page.click("input[data-test='login-button']")
@@ -33,8 +17,9 @@ def test_login_valid_user(setup):
         take_screenshot_on_failure(page, "login_valid_user")
         raise
 
-def test_login_invalid_user(setup):
-    page = setup
+
+def test_login_invalid_user(page):
+    page.goto("https://www.saucedemo.com/")
     page.fill("input[data-test='username']", "locked_out_user")
     page.fill("input[data-test='password']", "secret_sauce")
     page.click("input[data-test='login-button']")
@@ -47,8 +32,9 @@ def test_login_invalid_user(setup):
         take_screenshot_on_failure(page, "login_invalid_user")
         raise
 
-def test_add_products_and_checkout(setup):
-    page = setup
+
+def test_add_products_and_checkout(page):
+    page.goto("https://www.saucedemo.com/")
     page.fill("input[data-test='username']", "standard_user")
     page.fill("input[data-test='password']", "secret_sauce")
     page.click("input[data-test='login-button']")
