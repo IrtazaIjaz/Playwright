@@ -5,5 +5,5 @@ def test_search_duckduckgo(page):
     page.fill("input[name='q']", "Playwright Python")
     page.press("input[name='q']", "Enter")
 
-    # Title check (DuckDuckGo format is "<query> at DuckDuckGo")
-    expect(page).to_have_title(lambda title: "playwright" in title.lower())
+    # Correct title check (DuckDuckGo format: "<query> at DuckDuckGo")
+    expect(page).to_have_title("Playwright Python at DuckDuckGo")
