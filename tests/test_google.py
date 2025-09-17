@@ -6,5 +6,5 @@ def test_google_search(page):
     google.goto()
     google.search("Playwright Python")
 
-    # Wait for search results
-    expect(page).to_have_title(lambda title: "playwright" in title.lower())
+    # Wait until title contains "Playwright"
+    expect(page).to_have_title(r".*Playwright.*")
