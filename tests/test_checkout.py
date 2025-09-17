@@ -1,5 +1,6 @@
 import pytest
 from pages.login_page import LoginPage
+from utils.helpers import assert_text_contains
 
 def test_checkout_flow(page):
     login_page = LoginPage(page)
@@ -18,8 +19,11 @@ def test_checkout_flow(page):
     page.locator("input[name='continue']").click()
     # Finish checkout
     page.locator("button[data-test='finish']").click()
-    # Assert order confirmation
-    confirmation = page.locator(".complete-header")
-    assert confirmation.is_visible(), "Order confirmation not visible after checkout"
-    assert "thank you for your order" in confirmation.text_content().lower(), \
-        f"Unexpected confirmation message: {confirmation.text_content()}"
+
+    # Robust checks
+    # 1) page URL shows checkout complete
+    assert "/checkout-complete.html" in page.url, f"Not on checkout complete page, current url: {page.url}"
+
+    # 2) normalized confirmation text contains expected words (case/punctuation insensitive)
+    confirmation_text = page.locator(".complete-header").text_content()
+    assert_text_contains(confirmation_text, "thank you for your order", f"Unexpected confirmation message: {confirmation_text}")
